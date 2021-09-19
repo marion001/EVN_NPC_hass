@@ -5,7 +5,7 @@ api lấy dữ liệu đồng hồ điện lực miền bắc
 
 Các bạn tải 2 file: EVN_NPC_JSON.php và file EVN_NPC_CONFIG.php về, tải xong mở file EVN_NPC_CONFIG.php thay mã khách hàng của bạn vào dòng: $MaKhachHang = "PA***********";.
 
-tiếp đến các bạn up lên host hoặc (cài apache và cài php, cài thêm cả các php common extensions trên server của bạn).
+tiếp đến các bạn up 2 file đó (cùng chung 1 thư mục/ ngang hàng nhau) lên host, nếu k có host bạn có thể cài apache và install php trên con hass của bạn (cài apache và cài php, cài thêm cả các php common extensions trên server của bạn).
 
 Cài xong các bạn chạy file trên trình duyệt
   - VD: http://192.186.14.17/EVN_NPC_JSON.php  nó sẽ hiện ra các thông tin của đồng hồ điện nhà b như dưới này là ok
