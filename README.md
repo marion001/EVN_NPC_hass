@@ -139,7 +139,7 @@ Demo UI:
           state_attr('sensor.evn_mien_bac','Tien_Dien_Thang_Nay').0.SoTien_ThanhToan}}</font> 
 
           - Tỉ Lệ: <font color=gree>{{
-          state_attr('sensor.evn_mien_bac','Tien_Dien_Thang_Nay').0.Ti_Le_ThayDoi}}</font>
+          state_attr('sensor.evn_mien_bac','Tien_Dien_Thang_Nay').0.Ti_Le_ThayDoi}}</font> So với tháng trước
 
 
           Tháng: <font color=gree>{{
