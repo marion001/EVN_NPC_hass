@@ -65,6 +65,10 @@ Cấu hình trên has demo: coppy nội dung dưới vào sensors.yaml, thay url
         - Tien_Dien_Thang_Truoc_Nua
 
 
+Demo ảnh Sensor:
+![VD4](https://user-images.githubusercontent.com/27297851/136682914-c72dbadf-f853-4180-a581-8d710ab53044.png)
+
+
 Cấu hình trong lovelace:
 Demo UI:
 
