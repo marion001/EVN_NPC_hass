@@ -30,6 +30,9 @@ Cài xong các bạn chạy file trên trình duyệt
   .............................
   .............................
   
+  ![VD1](https://user-images.githubusercontent.com/27297851/136682598-45b43255-3526-4ad5-8715-5bbbba2c293d.png)
+
+  
 Cấu hình trên has demo: coppy nội dung dưới vào sensors.yaml, thay url/Link của bạn cho phù hợp
 
     - platform: rest  
