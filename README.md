@@ -146,3 +146,6 @@ Demo UI:
          - Trạng Thái Thanh Toán: <font color=gree>{{
          state_attr('sensor.evn_mien_bac','Tien_Dien_Thang_Truoc').0.TrangThai_ThanhToan}}</font>
 
+Demo Ảnh:
+![VD2](https://user-images.githubusercontent.com/27297851/136682705-33a0e264-5f62-443a-85c0-3906f816dba7.png)
+
