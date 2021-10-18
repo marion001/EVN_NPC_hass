@@ -8,6 +8,7 @@ include('./EVN_NPC_CONFIG.php');
 $curl1 = curl_init();
 $curl2 = curl_init();
 $curl3 = curl_init();
+$curl4 = curl_init();
 ///////////////////////////////////////
 curl_setopt_array($curl1, array(
   CURLOPT_URL => "$API_Get_Info_KH",
@@ -53,6 +54,7 @@ curl_setopt_array($curl3, array(
 	'Content-Length: 0'
   ),
 ));
+
 $response = curl_exec($curl3);
 if (curl_errno($curl3)) { $error_msg3 = curl_error($curl3);}
 curl_close($curl3);
@@ -60,10 +62,48 @@ if (isset($error_msg3)) { echo "Lỗi Curl Get Sản Lượng Điện Theo Ngày
 curl_close($curl3);
 ////////////////////////////////////////////////
     $myfile = fopen("RVZO.html", "w+") or die("Lỗi Không Thể Tạo File! RVZO.html, hoặc cần được cấp quyền 777 hoặc 755");
-    $txt = "$response";
     fwrite($myfile, $response);
     fclose($myfile);
 $html = file_get_html('./RVZO.html'); 
+
+////////////////////
+curl_setopt_array($curl4, array(
+  CURLOPT_URL => "https://cskh.npc.com.vn/ThongTinKhachHang/LichNgungGiamCungCapDienSPC?maKH=$MaKhachHang&madvi=&tuNgay=$SetNgayThang&denNgay=$LichCatDien", //$LichCatDien
+  CURLOPT_RETURNTRANSFER => true,
+  CURLOPT_ENCODING => '',
+  CURLOPT_MAXREDIRS => 10,
+  CURLOPT_TIMEOUT => 0,
+  CURLOPT_FOLLOWLOCATION => true,
+  CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+  CURLOPT_CUSTOMREQUEST => 'GET',
+  CURLOPT_HTTPHEADER => array(
+    'Cookie: culture=Vi',
+	'Content-Length: 0'
+  ),
+));
+$LichCatDien = curl_exec($curl4);
+if (curl_errno($curl4)) { $error_msg4 = curl_error($curl4);}
+curl_close($curl4);
+if (isset($error_msg4)) { echo "Lỗi Curl Get Lịch Cắt Điện";}
+curl_close($curl4);
+    $myfile0 = fopen("LichCatDien.html", "w+") or die("Lỗi Không Thể Tạo File! LichCatDien.html, hoặc cần được cấp quyền 777 hoặc 755");
+    fwrite($myfile0, $LichCatDien);
+    fclose($myfile0);
+$Data_Lich_Cat_Dien = file_get_html('./LichCatDien.html'); 
+$KhuVuc = $Data_Lich_Cat_Dien->find('td', 3)->plaintext; // Khu Vực
+$ThoiGianMatDien = substr($Data_Lich_Cat_Dien->find('td', 1)->plaintext, 11, -7);  //$ThoiGianMatDien 
+$ThoiGianCoDien = substr($Data_Lich_Cat_Dien->find('td', 2)->plaintext, 11, -7);  //$ThoiGianCoDien 
+$NgayMatDien = substr($Data_Lich_Cat_Dien->find('td', 1)->plaintext, 0, -13); // Ngày Mất Điện
+$NgayCoDien = substr($Data_Lich_Cat_Dien->find('td', 2)->plaintext, 0, -13);  //Ngày Có Điện
+$CheckNullNgay = "$KhuVuc";
+if ($CheckNullNgay === "" ) {
+    $DataCD = "Không Có Lịch Cắt Điện";
+} else {
+    $DataCD = "Từ: $ThoiGianMatDien' -> $ThoiGianCoDien'";
+}
+
+///////////////
+
 // TÍnh TIền ĐIện
 $SoDien = $html->find('td', 2)->plaintext - $ThongTin_KH->data->customerInfo->chiSoDienList[0]->chiSoMoi;
 if ($SoDien >= 1) { // trên 1 số sẽ chạy tính tiền điện
@@ -200,6 +240,14 @@ $VuTuyen = array(
 				"SanLuongTieuThu" => trim($html->find('td', 14)->plaintext.'(kWh)')
         )
 		),
+
+			"LichCatDien" => array(
+				"Ngay" => "$NgayMatDien",
+				"Thoigian" => "$DataCD",
+				"KhuVuc" => "$KhuVuc"
+        ),
+		
+
     "Tien_Dien_Thang_Nay" => array(
 		array(
 			"Ky" => $ThongTin_KH->data->customerInfo->invoice[0]->period,
