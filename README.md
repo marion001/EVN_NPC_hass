@@ -158,3 +158,36 @@ Demo Ảnh UI Lovelace
 Demo Ảnh:
 ![VD2](https://user-images.githubusercontent.com/27297851/136682705-33a0e264-5f62-443a-85c0-3906f816dba7.png)
 
+Tạo Automation Thông Báo Khi Có Lịch Cắt Điện:
+
+    - id: '16343656465466555551964047'
+      alias: Thông Báo Lịch Mất Điện tts và notify
+      trigger:
+        platform: time 
+        at: '20:01:00'
+      condition:
+        condition: template
+        value_template: >
+          {% if state_attr('sensor.evn_mien_bac','LichCatDien').Ngay == 'Không Có Lịch Cắt Điện' %}
+            false
+          {% else %}
+            true
+          {% endif %}
+      action:
+      - service: notify.notify
+        data:
+          title: "Lịch Cắt Điện:"
+          message: "Ngày {{state_attr('sensor.evn_mien_bac','LichCatDien').Ngay}} {{state_attr('sensor.evn_mien_bac','LichCatDien').Thoigian}}"
+      - service: tts_viettel.say
+        data_template:
+          entity_id: media_player.phong_ngu_tuyen    
+          message: "Thông Báo Lịch Cắt Điện: Ngày {{state_attr('sensor.evn_mien_bac','LichCatDien').Ngay}} {{state_attr('sensor.evn_mien_bac','LichCatDien').Thoigian}}"
+          voice_type: 'nu_mien_bac_01'    
+          speed: '0.9'
+      - delay: '00:00:7'
+      - service: tts_viettel.say
+        data_template:
+          entity_id: media_player.phong_ngu_tuyen    
+          message: "Thông Báo Lại: Lịch Cắt Điện: Ngày {{state_attr('sensor.evn_mien_bac','LichCatDien').Ngay}} {{state_attr('sensor.evn_mien_bac','LichCatDien').Thoigian}}"
+          voice_type: 'nu_mien_bac_01'    
+          speed: '0.9'
