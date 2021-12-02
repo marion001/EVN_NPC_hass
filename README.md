@@ -59,6 +59,7 @@ Cấu hình trên has demo: coppy nội dung dưới vào sensors.yaml, thay url
         - TrangThaiMatDien
         - LanThayDoiCuoi
         - SL_Dien_Theo_ngay
+        - LichCatDien
         - UocTinhTienDienThangNay
         - Tien_Dien_Thang_Nay
         - Tien_Dien_Thang_Truoc
@@ -92,6 +93,9 @@ Demo UI:
 
          Chỉ Số Mới: <b><font color=00FFCC> {{
          state_attr('sensor.evn_mien_bac','ChiSoMoi')}}</font></b><br/>
+         Lịch Cắt Điện: <font color=gree> {{
+         state_attr('sensor.evn_mien_bac','LichCatDien').Ngay}}</font> <font
+         color=gree> {{state_attr('sensor.evn_mien_bac','LichCatDien').Thoigian}}</font><br/>
          Lần Cập Nhật
          Cuối: <font color=gree> {{
          state_attr('sensor.evn_mien_bac','LanThayDoiCuoi')}}'</font> <hr/>
