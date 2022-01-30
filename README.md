@@ -63,7 +63,7 @@ Cấu hình trên has demo: coppy nội dung dưới vào sensors.yaml, thay url
         - UocTinhTienDienThangNay
         - Tien_Dien_Thang_Nay
         - Tien_Dien_Thang_Truoc
-        - Tien_Dien_Thang_Truoc_Nua
+
 
 
 Demo ảnh Sensor:
