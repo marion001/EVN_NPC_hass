@@ -3,15 +3,15 @@
 #Youtube: https://www.youtube.com/c/Marion001
 #Fb: https://www.facebook.com/TWFyaW9uMDAx
 #Page: https://www.facebook.com/Party.Marion002
-include('./simple_html_dom.php');
+//include('./simple_html_dom.php');
 include('./EVN_NPC_CONFIG.php');
 $curl1 = curl_init();
 $curl2 = curl_init();
 $curl3 = curl_init();
 $curl4 = curl_init();
-///////////////////////////////////////
+/////////////////////////////////////// // Api màn hình home info khách hàng
 curl_setopt_array($curl1, array(
-  CURLOPT_URL => "$API_Get_Info_KH",
+  CURLOPT_URL => "https://billnpccc.enterhub.asia/mobileapi/home/$MaKhachHang",
   CURLOPT_RETURNTRANSFER => true,
   CURLOPT_ENCODING => '',
   CURLOPT_MAXREDIRS => 10,
@@ -39,36 +39,11 @@ if (curl_errno($curl2)) { $error_msg2 = curl_error($curl2);}
 curl_close($curl2);
 if (isset($error_msg2)) { echo "Lỗi Curl Get Có Mất Điện";}
 $Get_TTCD = json_decode($TTCD);
-////////////////////////////////////
+
+////////////////////////////////////  
+
 curl_setopt_array($curl3, array(
-  CURLOPT_URL => "http://cskh.npc.com.vn/DichVuTrucTuyen/TraCuuSanLuongDienTheoNgay?MaKhachHangChiSoChot=$MaDiemDo&TuNgayChiSoChot=$NgayChotBatDau&DenNgayChiSoChot=$SetNgayThang",
-  CURLOPT_RETURNTRANSFER => true,
-  CURLOPT_ENCODING => '',
-  CURLOPT_MAXREDIRS => 10,
-  CURLOPT_TIMEOUT => 0,
-  CURLOPT_FOLLOWLOCATION => true,
-  CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-  CURLOPT_CUSTOMREQUEST => 'POST',
-  CURLOPT_HTTPHEADER => array(
-    'Cookie: culture=Vi',
-	'Content-Length: 0'
-  ),
-));
-
-$response = curl_exec($curl3);
-if (curl_errno($curl3)) { $error_msg3 = curl_error($curl3);}
-curl_close($curl3);
-if (isset($error_msg3)) { echo "Lỗi Curl Get Sản Lượng Điện Theo Ngày";}
-curl_close($curl3);
-////////////////////////////////////////////////
-    $myfile = fopen("RVZO.html", "w+") or die("Lỗi Không Thể Tạo File! RVZO.html, hoặc cần được cấp quyền 777 hoặc 755");
-    fwrite($myfile, $response);
-    fclose($myfile);
-$html = file_get_html('./RVZO.html'); 
-
-////////////////////
-curl_setopt_array($curl4, array(
-  CURLOPT_URL => "https://cskh.npc.com.vn/ThongTinKhachHang/LichNgungGiamCungCapDienSPC?maKH=$MaKhachHang&madvi=&tuNgay=$SetNgayThang&denNgay=$LichCatDien", //$LichCatDien
+  CURLOPT_URL => "https://meterindex.enterhub.asia/SLngay?MA_DDO=$MaDiemDo&STARTTIME=$NgayChotBatDau&STOPTIME=$SetNgayThang",    // Sản lượng ngày
   CURLOPT_RETURNTRANSFER => true,
   CURLOPT_ENCODING => '',
   CURLOPT_MAXREDIRS => 10,
@@ -81,31 +56,47 @@ curl_setopt_array($curl4, array(
 	'Content-Length: 0'
   ),
 ));
-$LichCatDien = curl_exec($curl4);
+$response = curl_exec($curl3);
+if (curl_errno($curl3)) { $error_msg3 = curl_error($curl3);}
+curl_close($curl3);
+if (isset($error_msg3)) { echo "Lỗi Curl Get Sản Lượng Điện Theo Ngày";}
+curl_close($curl3);
+$SLDienNgay = json_decode($response);
+////////////////////
+curl_setopt_array($curl4, array(
+  CURLOPT_URL => "https://billnpccc.enterhub.asia/PowerLossByCustomerID?ma_khang=$MaKhachHang&tu_ngay=$SetNgayThang&den_ngay=$SetNgayThang&ma_ddo=$MaDiemDo", //$LichCatDien
+  CURLOPT_RETURNTRANSFER => true,
+  CURLOPT_ENCODING => '',
+  CURLOPT_MAXREDIRS => 10,
+  CURLOPT_TIMEOUT => 0,
+  CURLOPT_FOLLOWLOCATION => true,
+  CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+  CURLOPT_CUSTOMREQUEST => 'GET',
+  CURLOPT_HTTPHEADER => array(
+    'Cookie: culture=Vi',
+	'Content-Length: 0'
+  ),
+));
+$LichCatDienn = curl_exec($curl4);
 if (curl_errno($curl4)) { $error_msg4 = curl_error($curl4);}
 curl_close($curl4);
 if (isset($error_msg4)) { echo "Lỗi Curl Get Lịch Cắt Điện";}
 curl_close($curl4);
-    $myfile0 = fopen("LichCatDien.html", "w+") or die("Lỗi Không Thể Tạo File! LichCatDien.html, hoặc cần được cấp quyền 777 hoặc 755");
-    fwrite($myfile0, $LichCatDien);
-    fclose($myfile0);
-$Data_Lich_Cat_Dien = file_get_html('./LichCatDien.html'); 
-$KhuVuc = $Data_Lich_Cat_Dien->find('td', 3)->plaintext; // Khu Vực
-$ThoiGianMatDien = substr($Data_Lich_Cat_Dien->find('td', 1)->plaintext, 11, -7);  //$ThoiGianMatDien 
-$ThoiGianCoDien = substr($Data_Lich_Cat_Dien->find('td', 2)->plaintext, 11, -7);  //$ThoiGianCoDien 
-$NgayMatDien = substr($Data_Lich_Cat_Dien->find('td', 1)->plaintext, 0, -13); // Ngày Mất Điện
-$NgayCoDien = substr($Data_Lich_Cat_Dien->find('td', 2)->plaintext, 0, -13);  //Ngày Có Điện
-$CheckNullNgay = "$KhuVuc";
-if ($CheckNullNgay === "" ) {
-    $DataCD = "Không Có Lịch Cắt Điện";
+$Data_Lich_Cat_Dien = json_decode($LichCatDienn);
+//$KhuVuc = $Data_Lich_Cat_Dien->data[0]->khuvuc_matdien;
+//$NgayMatDien = substr($Data_Lich_Cat_Dien->data[0]->ngay_catdien, 0, -13);
+//$NoiDung = $Data_Lich_Cat_Dien->data[0]->noi_dung;
+$ThoiGianMatDien = substr($Data_Lich_Cat_Dien->data[0]->ngay_catdien, 11, -7);  
+$ThoiGianCoDien = substr($Data_Lich_Cat_Dien->data[0]->ngay_tailap, 11, -7);  
+$CheckNullNgay = $Data_Lich_Cat_Dien->alert;
+if ($CheckNullNgay === "Không có lịch cắt điện" ) {
+    $DataCD = "Không có lịch cắt điện";
 } else {
     $DataCD = "Từ: $ThoiGianMatDien' -> $ThoiGianCoDien'";
 }
-
 ///////////////
-
 // TÍnh TIền ĐIện
-$SoDien = $html->find('td', 2)->plaintext - $ThongTin_KH->data->customerInfo->chiSoDienList[0]->chiSoMoi;
+$SoDien = $SLDienNgay[3]->CHI_SO_KET_THUC - $ThongTin_KH->data->customerInfo->chiSoDienList[0]->chiSoMoi;
 if ($SoDien >= 1) { // trên 1 số sẽ chạy tính tiền điện
 // Từ 1 đến 50 số điện
 if ($SoDien <= 50 && $SoDien >= 1) {   
@@ -212,39 +203,40 @@ $VuTuyen = array(
 	"MaSoCongTo"=> $ThongTin_KH->data->customerInfo->soCongToList[0],
 	"ChiSoCu"=> $ThongTin_KH->data->customerInfo->chiSoDienList[0]->chiSoCu."(kWh)",
 	"ChiSoMoi"=> $ThongTin_KH->data->customerInfo->chiSoDienList[0]->chiSoMoi."(kWh)",
-	"TrangThaiMatDien"=> "Hiện ". $Get_TTCD->alert,
-	"LanThayDoiCuoi"=>"$SetThoiGian",
+	"TrangThaiMatDien"=> $Get_TTCD->alert,
+	"LanThayDoiCuoi"=>"$SetThoiGian'",
 		"UocTinhTienDienThangNay" => array(
 			"ThoiDiemHienTai" => array(
-				"Tinh_Den_Ngay" => $html->find('td', 1)->plaintext,
+				"Tinh_Den_Ngay" => substr($SLDienNgay[3]->THOI_GIAN_BAT_DAU, 0, -9),
 				"Dien_Nang_Tieu_Thu" => number_format(round($SoDien,0))."(kWh)",
 				"Tien_Chua_thue" => number_format(round($tong,0))."(VNĐ)",
 				"Tien_Thue_VAT" => number_format($VAT)."(VNĐ)",
 				"Tong_Tien_Can_TT" => number_format($TongTienCanTT)."(VNĐ)"
         )
 		),
-		"SL_Dien_Theo_ngay" => array(
+		"SL_Dien_Theo_ngay" => array( 
 			"HomKia" => array(
-				"Ngay" => $html->find('td', 1)->plaintext,
-				"ChiSoChot" => trim($html->find('td', 2)->plaintext.'(kWh)'),
-				"SanLuongTieuThu" => trim($html->find('td', 4)->plaintext.'(kWh)')
+				"Ngay" => substr($SLDienNgay[3]->THOI_GIAN_BAT_DAU, 0, -9),
+				"ChiSoChot" => $SLDienNgay[3]->CHI_SO_KET_THUC."(kWh)",
+				"SanLuongTieuThu" => $SLDienNgay[3]->SAN_LUONG."(kWh)"
         ),
 			"HomKiaf" => array(
-				"Ngay" => $html->find('td', 6)->plaintext,
-				"ChiSoChot" => trim($html->find('td', 7)->plaintext.'(kWh)'),
-				"SanLuongTieuThu" => trim($html->find('td', 9)->plaintext.'(kWh)')
+				"Ngay" => substr($SLDienNgay[5]->THOI_GIAN_BAT_DAU, 0, -9),
+				"ChiSoChot" => $SLDienNgay[5]->CHI_SO_KET_THUC."(kWh)",
+				"SanLuongTieuThu" => $SLDienNgay[5]->SAN_LUONG."(kWh)"
         ),
 			"HomKiafNua" => array(
-				"Ngay" => $html->find('td', 11)->plaintext,
-				"ChiSoChot" => trim($html->find('td', 12)->plaintext.'(kWh)'),
-				"SanLuongTieuThu" => trim($html->find('td', 14)->plaintext.'(kWh)')
+				"Ngay" => substr($SLDienNgay[7]->THOI_GIAN_BAT_DAU, 0, -9),
+				"ChiSoChot" => $SLDienNgay[7]->CHI_SO_KET_THUC."(kWh)",
+				"SanLuongTieuThu" => $SLDienNgay[7]->SAN_LUONG."(kWh)"
         )
 		),
 
 			"LichCatDien" => array(
-				"Ngay" => "$NgayMatDien",
+				"Ngay" => substr($Data_Lich_Cat_Dien->data[0]->ngay_catdien, 0, -13),
 				"Thoigian" => "$DataCD",
-				"KhuVuc" => "$KhuVuc"
+				"KhuVuc" => $Data_Lich_Cat_Dien->data[0]->khuvuc_matdien,
+				"NoiDung" => $Data_Lich_Cat_Dien->data[0]->noi_dung
         ),
 		
 
@@ -256,7 +248,9 @@ $VuTuyen = array(
 			"SanLuong" => $ThongTin_KH->data->customerInfo->invoice[0]->usageAmount."(kWh)",
 			"SoTien_ThanhToan" => number_format($ThongTin_KH->data->customerInfo->invoice[0]->paymentTotalAmount)."(VNĐ)",
 			"TrangThai_ThanhToan" => $ThongTin_KH->data->customerInfo->invoice[0]->paid ? 'Đã thanh toán' : 'Chưa thanh toán',
-			"Ti_Le_ThayDoi" => $ThongTin_KH->data->customerInfo->chiSoDienList[0]->sanLuongChangeRate."%"
+			"Ti_Le_ThayDoi" => $ThongTin_KH->data->customerInfo->chiSoDienList[0]->sanLuongChangeRate."%",
+			"PhuongThucThanhToan" => $ThongTin_KH->data->customerInfo->invoice[0]->pttt,
+			"ThoiGianThanhToan" => substr($ThongTin_KH->data->customerInfo->invoice[0]->ngayTao, -8)." - ".substr($ThongTin_KH->data->customerInfo->invoice[0]->ngayTao,0, -9)
 			
         )),
     "Tien_Dien_Thang_Truoc" => array(
@@ -267,7 +261,7 @@ $VuTuyen = array(
 			"SanLuong" => $ThongTin_KH->data->customerInfo->invoice[1]->usageAmount."(kWh)",
 			"SoTien_ThanhToan" => number_format($ThongTin_KH->data->customerInfo->invoice[1]->paymentTotalAmount)."(VNĐ)",
 			"TrangThai_ThanhToan" => $ThongTin_KH->data->customerInfo->invoice[1]->paid ? 'Đã thanh toán' : 'Chưa thanh toán'
-        )),
+        ))/*,
 	"Tien_Dien_Thang_Truoc_Nua" => array(
 		array(
 			"Ky" => $ThongTin_KH->data->customerInfo->invoice[2]->period,
@@ -276,7 +270,11 @@ $VuTuyen = array(
 			"SanLuong" => $ThongTin_KH->data->customerInfo->invoice[2]->usageAmount."(kWh)",
 			"SoTien_ThanhToan" => number_format($ThongTin_KH->data->customerInfo->invoice[2]->paymentTotalAmount)."(VNĐ)",
 			"TrangThai_ThanhToan" => $ThongTin_KH->data->customerInfo->invoice[2]->paid ? 'Đã thanh toán' : 'Chưa thanh toán'
-        )));
+        )) 
+		*/
+		
+		
+		);
 echo json_encode($VuTuyen);
 
 
