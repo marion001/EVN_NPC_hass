@@ -37,7 +37,10 @@ curl_setopt_array($curl2, array(
 $TTCD = curl_exec($curl2);
 if (curl_errno($curl2)) { $error_msg2 = curl_error($curl2);}
 curl_close($curl2);
-if (isset($error_msg2)) { echo "Lỗi Curl Get Có Mất Điện";}
+if (isset($error_msg2)) { 
+	//echo "Lỗi Curl Get Có Mất Điện";
+			
+		}
 $Get_TTCD = json_decode($TTCD);
 
 ////////////////////////////////////  
