@@ -14,5 +14,5 @@ $SetThoiGian = date("H:i");
 $TinhToanNgayThang = date_create("$SetNgayThang");
 $NgayChotBatDau = date_format(date_modify(date_create("$SetNgayThang"), "-4 days"), "d-m-Y");
 $LichCatDien = date_format(date_modify(date_create("$SetNgayThang"), "+15 days"), "d-m-Y");
-$API_Co_Mat_Dien = base64_decode("aHR0cHM6Ly9hcGlucGMuZWR1a2l0ZWFwcC5vbmxpbmUvbW9iaWxlYXBpL3Rob25nLXRpbi1jYXQtZGllbi9nZXQ=");
+//$API_Co_Mat_Dien = base64_decode("aHR0cHM6Ly9hcGlucGMuZWR1a2l0ZWFwcC5vbmxpbmUvbW9iaWxlYXBpL3Rob25nLXRpbi1jYXQtZGllbi9nZXQ=");
 ?>
