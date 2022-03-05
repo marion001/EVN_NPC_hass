@@ -26,7 +26,7 @@ if (isset($error_msg1)) { echo "Lỗi Curl Get info Khách Hàng";}
 $ThongTin_KH = json_decode($info_KH);
 ////////////////////////////////////////////
 curl_setopt_array($curl2, array(
-  CURLOPT_URL => "$API_Co_Mat_Dien/$MaDVQuanLy/$MaKhachHang",
+  CURLOPT_URL => "https://billnpccc.enterhub.asia/mobileapi/thong-tin-cat-dien/get/$MaDVQuanLy/$MaKhachHang",
   CURLOPT_RETURNTRANSFER => true,
   CURLOPT_ENCODING => '',
   CURLOPT_MAXREDIRS => 10,
@@ -37,10 +37,9 @@ curl_setopt_array($curl2, array(
 $TTCD = curl_exec($curl2);
 if (curl_errno($curl2)) { $error_msg2 = curl_error($curl2);}
 curl_close($curl2);
-if (isset($error_msg2)) { 
-	//echo "Lỗi Curl Get Có Mất Điện";
-			
-		}
+if (isset($error_msg2)) {
+//echo "Lỗi có maatss didnejj";
+}
 $Get_TTCD = json_decode($TTCD);
 
 ////////////////////////////////////  
@@ -65,9 +64,10 @@ curl_close($curl3);
 if (isset($error_msg3)) { echo "Lỗi Curl Get Sản Lượng Điện Theo Ngày";}
 curl_close($curl3);
 $SLDienNgay = json_decode($response);
-////////////////////
+//////////////////// Lịch Cắt Điện
 curl_setopt_array($curl4, array(
   CURLOPT_URL => "https://billnpccc.enterhub.asia/PowerLossByCustomerID?ma_khang=$MaKhachHang&tu_ngay=$SetNgayThang&den_ngay=$SetNgayThang&ma_ddo=$MaDiemDo", //$LichCatDien
+//  CURLOPT_URL => "https://billnpccc.enterhub.asia/PowerLossByCustomerID?ma_khang=$MaKhachHang&tu_ngay=$SetNgayThang&den_ngay=28/01/2022&ma_ddo=$MaDiemDo", //$LichCatDien
   CURLOPT_RETURNTRANSFER => true,
   CURLOPT_ENCODING => '',
   CURLOPT_MAXREDIRS => 10,
@@ -95,8 +95,14 @@ $CheckNullNgay = $Data_Lich_Cat_Dien->alert;
 if ($CheckNullNgay === "Không có lịch cắt điện" ) {
     $DataCD = "Không có lịch cắt điện";
 } else {
-    $DataCD = "Từ: $ThoiGianMatDien' -> $ThoiGianCoDien'";
+    $DataCD = "Từ: $ThoiGianMatDien' đến $ThoiGianCoDien'";
 }
+//Sắp xếp lại ngày tháng năm của lịch cắt điện
+$LichCatDienXEPNGAY = substr($Data_Lich_Cat_Dien->data[0]->ngay_catdien, 8, -13)."-".substr($Data_Lich_Cat_Dien->data[0]->ngay_catdien, 5, -16)."-".substr($Data_Lich_Cat_Dien->data[0]->ngay_catdien, 0, -19); //2022-01-30 13:00:00.000
+//$LichCatDienGetNGAY = substr($Data_Lich_Cat_Dien->data[0]->ngay_catdien, 8, -13);
+//$LichCatDienGetTHANG = substr($Data_Lich_Cat_Dien->data[0]->ngay_catdien, 5, -16);
+//$LichCatDienGetNAM = substr($Data_Lich_Cat_Dien->data[0]->ngay_catdien, 0, -19); //2022-01-30 13:00:00.000
+//echo $LichCatDienGetNAM;
 ///////////////
 // TÍnh TIền ĐIện
 $SoDien = $SLDienNgay[3]->CHI_SO_KET_THUC - $ThongTin_KH->data->customerInfo->chiSoDienList[0]->chiSoMoi;
@@ -236,7 +242,7 @@ $VuTuyen = array(
 		),
 
 			"LichCatDien" => array(
-				"Ngay" => substr($Data_Lich_Cat_Dien->data[0]->ngay_catdien, 0, -13),
+				"Ngay" => $LichCatDienXEPNGAY,
 				"Thoigian" => "$DataCD",
 				"KhuVuc" => $Data_Lich_Cat_Dien->data[0]->khuvuc_matdien,
 				"NoiDung" => $Data_Lich_Cat_Dien->data[0]->noi_dung
