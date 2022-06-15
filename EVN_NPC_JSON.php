@@ -66,7 +66,7 @@ curl_close($curl3);
 $SLDienNgay = json_decode($response);
 //////////////////// Lịch Cắt Điện
 curl_setopt_array($curl4, array(
-  CURLOPT_URL => "https://billnpccc.enterhub.asia/PowerLossByCustomerID?ma_khang=$MaKhachHang&tu_ngay=$SetNgayThang&den_ngay=$SetNgayThang&ma_ddo=$MaDiemDo", //$LichCatDien
+  CURLOPT_URL => "https://billnpccc.enterhub.asia/PowerLossByCustomerID?ma_khang=$MaKhachHang&tu_ngay=$SetNgayThang&den_ngay=$LichCatDien&ma_ddo=$MaDiemDo", //$LichCatDien
 //  CURLOPT_URL => "https://billnpccc.enterhub.asia/PowerLossByCustomerID?ma_khang=$MaKhachHang&tu_ngay=$SetNgayThang&den_ngay=28/01/2022&ma_ddo=$MaDiemDo", //$LichCatDien
   CURLOPT_RETURNTRANSFER => true,
   CURLOPT_ENCODING => '',
