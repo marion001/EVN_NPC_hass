@@ -4,6 +4,7 @@ Get Data EVN Miền Bắc
 api lấy dữ liệu đồng hồ điện lực miền bắc
 
 Đầu tiên các bạn cần cài web server (apache2 + php) bạn nào chưa có thì lên google hoặc youtube xem hướng dẫn cài trực tiếp vào pi hoặc androibox đang chạy hass của bạn
+sudo apt-get install php7.3-curl
 
 Các bạn tải thư mục EVN_NPC_hass về rồi upload thư mục đó lên web server của bạn,
 tiếp đến bạn set phân quyền 777 cho thư mục EVN_NPC_hass bằng lệnh: "chmod 777 EVN_NPC_hass"
