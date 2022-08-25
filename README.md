@@ -1,4 +1,5 @@
 # EVN_NPC_hass
+    Bản PYTHON: https://github.com/marion001/EVN_NPC_HASS_Python
 Get Data EVN Miền Bắc
 
 api lấy dữ liệu đồng hồ điện lực miền bắc
